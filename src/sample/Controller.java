@@ -10,6 +10,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.*;
 import javafx.scene.canvas.*;
+import sample.Figure.Drone;
 import sample.UdpPack.UdpPackage;
 import sample.UdpPack.UdpPackageReceiver;
 
@@ -36,10 +37,13 @@ public class Controller {
     private UdpPackageReceiver receiver;
     private DatagramSocket sender;
 
+
     public void initialize() throws UnknownHostException {
         /*UdpPackage test1 = new UdpPackage("name", "data", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
         UdpPackage test2 = new UdpPackage("name", "hello world", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
         loggedPackages.addAll(test1, test2)*/;
+
+        Drone drone = new Drone(gc, latitude, height);
 
 
         receiver = new UdpPackageReceiver(loggedPackages, 6000);
@@ -57,8 +61,13 @@ public class Controller {
         gc.setFill(Color.GRAY);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         height=canvas.getHeight()-30;
-        gc.setFill(Color.DARKRED);
-        gc.fillOval(canvas.getWidth()/2-25, height, 50, 20);
+        latitude=canvas.getWidth()/2-25;
+
+        //gc.setFill(Color.DARKRED);
+        //gc.fillOval(latitude, height, 50, 20);
+
+        //drone.drawDrone();
+
         takeoff=false;
         setInformation();
     }
@@ -94,20 +103,23 @@ public class Controller {
 
 
         gc.setFill(Color.DARKRED);
+        gc.fillOval(latitude, height, 50, 20);
 
-        gc.fillOval(canvas.getWidth()/2-25, height, 50, 20);
+
         height--;
 
 
     }
 
     public void takeOff() {
+
+
         for (int i=30; i>0; i--) {
             gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
             gc.setFill(Color.GRAY);
             gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
             gc.setFill(Color.DARKRED);
-            gc.fillOval(canvas.getWidth()/2-25, height, 50, 20);
+            gc.fillOval(latitude, height, 50, 20);
 
             height--;
         }
