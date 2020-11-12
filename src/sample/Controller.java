@@ -1,12 +1,20 @@
 package sample;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.*;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.*;
 import javafx.scene.canvas.*;
+import sample.UdpPack.UdpPackage;
+import sample.UdpPack.UdpPackageReceiver;
 
+import java.io.IOException;
+import java.net.*;
 
 
 public class Controller {
@@ -15,20 +23,60 @@ public class Controller {
     public Button beginButton;
     public Canvas canvas;
     public Label flying;
+    public TableView tableViewLog;
+    public Button udpbutton;
+    public TextField testmessagebox;
     private GraphicsContext gc;
     double height;
     double latitude;
     boolean takeoff;
 
-    public void initialize() {
+    private ObservableList<UdpPackage> savedPackages = FXCollections.observableArrayList();
+    private ObservableList<UdpPackage> loggedPackages = FXCollections.observableArrayList();
+
+    private UdpPackageReceiver receiver;
+    private DatagramSocket sender;
+
+    public void initialize() throws UnknownHostException {
+        UdpPackage test1 = new UdpPackage("name", "data", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
+        UdpPackage test2 = new UdpPackage("name", "hello world", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
+        loggedPackages.addAll(test1, test2);
+
+        tableViewLog.setItems(loggedPackages);
+
+        receiver = new UdpPackageReceiver(loggedPackages, 6000);
+        new Thread(receiver).start();
+
+        try {
+            sender = new DatagramSocket();
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+
+
+
         gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.GRAY);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         height=canvas.getHeight()-30;
         gc.setFill(Color.DARKRED);
-        gc.fillRect(canvas.getWidth()/2-15, height, 30, 30);
+        gc.fillOval(canvas.getWidth()/2-25, height, 50, 20);
         takeoff=false;
         setInformation();
+    }
+
+    public void sendUdpMessage(ActionEvent actionEvent) {
+
+        // sends a basic test message to localhost port 6000!
+
+        String message = testmessagebox.getText();
+        DatagramPacket packet = null;
+        try {
+            packet = new DatagramPacket(message.getBytes(), message.length(), InetAddress.getByName("127.0.0.1"), 6000);
+            sender.send(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -46,7 +94,8 @@ public class Controller {
         }
         setInformation();
         gc.setFill(Color.DARKRED);
-        gc.fillRect(canvas.getWidth()/2-15, height, 30, 30);
+
+        gc.fillOval(canvas.getWidth()/2-25, height, 50, 20);
         height--;
 
 
@@ -58,7 +107,8 @@ public class Controller {
             gc.setFill(Color.GRAY);
             gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
             gc.setFill(Color.DARKRED);
-            gc.fillRect(canvas.getWidth()/2-15, height, 30, 30);
+            gc.fillOval(canvas.getWidth()/2-25, height, 50, 20);
+
             height--;
         }
     }
