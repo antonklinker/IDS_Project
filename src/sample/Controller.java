@@ -91,6 +91,8 @@ public class Controller {
             takeoff=true;
         }
         setInformation();
+
+
         gc.setFill(Color.DARKRED);
 
         gc.fillOval(canvas.getWidth()/2-25, height, 50, 20);
