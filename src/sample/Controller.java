@@ -23,7 +23,6 @@ public class Controller {
     public Button beginButton;
     public Canvas canvas;
     public Label flying;
-    public TableView tableViewLog;
     public Button udpbutton;
     public TextField testmessagebox;
     private GraphicsContext gc;
@@ -38,11 +37,10 @@ public class Controller {
     private DatagramSocket sender;
 
     public void initialize() throws UnknownHostException {
-        UdpPackage test1 = new UdpPackage("name", "data", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
+        /*UdpPackage test1 = new UdpPackage("name", "data", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
         UdpPackage test2 = new UdpPackage("name", "hello world", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
-        loggedPackages.addAll(test1, test2);
+        loggedPackages.addAll(test1, test2)*/;
 
-        tableViewLog.setItems(loggedPackages);
 
         receiver = new UdpPackageReceiver(loggedPackages, 6000);
         new Thread(receiver).start();
