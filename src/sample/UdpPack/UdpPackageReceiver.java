@@ -14,6 +14,7 @@ public class UdpPackageReceiver implements Runnable{
     DatagramSocket socket;
     private byte[] buf = new byte[256];
     int port;
+    private String received;
 
     List udpPackages;
 
@@ -33,21 +34,27 @@ public class UdpPackageReceiver implements Runnable{
         running = false;
     }
 
+    public String getReceived() {
+        return received;
+    }
+
     @Override
     public void run() {
+        received = "WELCOME";
         while (running)
         {
-
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
             try {
                 socket.receive(packet);
                 System.out.println("package arrived!");
                 UdpPackage udpPackage = new UdpPackage("name", packet.getData(), packet.getAddress(), socket.getLocalAddress(), packet.getPort(), socket.getLocalPort());
                 udpPackages.add(udpPackage);
-                String received
+                received
                         = new String(packet.getData(), 0, packet.getLength());
                 //System.out.println(udpPackage.getDataAsString());
-                System.out.println(received);
+                if (getReceived().equals("hey")) {
+                    System.out.println("hey yourself");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

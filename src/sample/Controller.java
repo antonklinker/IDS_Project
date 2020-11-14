@@ -36,6 +36,8 @@ public class Controller {
 
     private UdpPackageReceiver receiver;
     private DatagramSocket sender;
+    private Drone drone;
+    private Thread listenTimer;
 
 
     public void initialize() throws UnknownHostException {
@@ -43,11 +45,10 @@ public class Controller {
         UdpPackage test2 = new UdpPackage("name", "hello world", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
         loggedPackages.addAll(test1, test2)*/;
 
-        Drone drone = new Drone(gc, latitude, height);
-
 
         receiver = new UdpPackageReceiver(loggedPackages, 6000);
         new Thread(receiver).start();
+
 
         try {
             sender = new DatagramSocket();
@@ -58,15 +59,18 @@ public class Controller {
 
 
         gc = canvas.getGraphicsContext2D();
+
         gc.setFill(Color.GRAY);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         height=canvas.getHeight()-30;
         latitude=canvas.getWidth()/2-25;
 
         //gc.setFill(Color.DARKRED);
-        //gc.fillOval(latitude, height, 50, 20);
 
-        //drone.drawDrone();
+        drone = new Drone(canvas, gc, latitude, height, 50, 20, receiver);
+        new Thread(drone).start();
+        //drone.drawDrone(latitude, height);
+        //gc.fillOval(latitude, height, 50, 20);
 
         takeoff=false;
         setInformation();
@@ -81,6 +85,7 @@ public class Controller {
         try {
             packet = new DatagramPacket(message.getBytes(), message.length(), InetAddress.getByName("127.0.0.1"), 6000);
             sender.send(packet);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,7 +94,7 @@ public class Controller {
 
 
     public void begin(ActionEvent actionEvent) {
-        gc = canvas.getGraphicsContext2D();
+       // gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.setFill(Color.GRAY);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -102,9 +107,9 @@ public class Controller {
         setInformation();
 
 
-        gc.setFill(Color.DARKRED);
-        gc.fillOval(latitude, height, 50, 20);
-
+        //gc.setFill(Color.DARKRED);
+        //gc.fillOval(latitude, height, 50, 20);
+        drone.drawDrone(latitude, height);
 
         height--;
 
@@ -114,15 +119,7 @@ public class Controller {
     public void takeOff() {
 
 
-        for (int i=30; i>0; i--) {
-            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-            gc.setFill(Color.GRAY);
-            gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-            gc.setFill(Color.DARKRED);
-            gc.fillOval(latitude, height, 50, 20);
 
-            height--;
-        }
     }
 
     public void setInformation() {
@@ -140,4 +137,13 @@ public class Controller {
     public double getHeight() {
         return ((-height)+(canvas.getHeight())-30);
     }
+
+    public void moveUp() {
+        height=height-5;
+    }
+
+    public void listen() {
+
+    }
+
 }
