@@ -43,10 +43,12 @@ public class Drone implements Runnable {
        gc.setFill(Color.BLACK);
        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
        for (int i=0; i<100; i++) {
+           gc.setGlobalAlpha(0.5);
            gc.setFill(Color.GREEN);
            gc.fillRect(0, i+(i*10), canvas.getWidth(), 1);
            gc.fillRect(i+(i*10), 0, 1, canvas.getHeight());
        }
+       gc.setGlobalAlpha(1);
        gc.setFill(Color.DARKGREEN);
        gc.fillRect(0, canvas.getHeight()-11, canvas.getWidth(), 11);
 
@@ -120,7 +122,7 @@ public class Drone implements Runnable {
                     notMoving();
                 }
                 if (receiver.getReceived().equals("crash")) {
-                    // MAKE CRASH
+                    crash();
                 }
                 if (takeoff) {
                     if (receiver.getReceived().equals("land")) {
@@ -294,6 +296,7 @@ public class Drone implements Runnable {
         }
     }
 
+    // FORWARD AND BACK IS NEVER USED
     // Forward and back increases the size of the drone, making it appear close or further away
     public void forward() {
         try {
@@ -325,5 +328,34 @@ public class Drone implements Runnable {
         }
         receiver.setReceived("not moving");
         moving=false;
+    }
+
+    public void crash() {
+        try {
+            moving=true;
+            while (height+5<groundHeight) {
+                height=height+4;
+                drawDrone(latitude, height);
+                Thread.sleep(20);
+            }
+            while (height<groundHeight) {
+                height++;
+                drawDrone(latitude, height);
+                Thread.sleep(20);
+            }
+                for (int i=0; i<150; i++) {
+                    gc.setFill(Color.RED);
+                    gc.fillOval(latitude-i+(sizeX/2), height+sizeY-i, i+i, i);
+                    gc.setFill(Color.ORANGERED);
+                    gc.fillOval(latitude-i+(sizeX/2+5), height+sizeY-i+5, i+i-10, i-10);
+                    gc.setFill(Color.RED);
+                    gc.fillOval(latitude-i+(sizeX/2+10), height+sizeY-i+10, i+i-20, i-20);
+                    Thread.sleep(20);
+                }
+            takeoff=false;
+            receiver.setReceived("not moving");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -14,6 +14,7 @@ public class Information implements Runnable {
     int batterycountdown = 50;
     boolean running;
     Drone drone;
+    private boolean crashed;
 
     public Information(Controller controller, Drone drone) {
         this.controller=controller;
@@ -22,8 +23,9 @@ public class Information implements Runnable {
 
     @Override
     public void run() {
+        crashed=false;
         running=true;
-        for (int i=0; i<=10; i++) {
+        for (int i=0; i<=1; i++) {
             battery.add(i);
         }
         while (running) {
@@ -41,8 +43,8 @@ public class Information implements Runnable {
                                 if (batterycountdown==0) {
                                     if (battery.size()<=10) {
                                         battery.add(1);
-                                        controller.setMessage("Battery level: " + battery.size() + "/10");
-                                        System.out.println("Battery level: " + battery.size() + "/10");
+                                        controller.setMessage("Battery level: " + battery.size() + "/11");
+                                        System.out.println("Battery level: " + battery.size() + "/11");
                                         controller.sendUdpMessageToESP();
                                     }
                                     batterycountdown=50;
@@ -52,8 +54,8 @@ public class Information implements Runnable {
                             if (battery.size()>0) {
                                 if (batterycountdown == 0) {
                                     battery.remove(battery.size() - 1);
-                                    controller.setMessage("Battery level: " + battery.size() + "/10");
-                                    System.out.println("Battery level: " + battery.size() + "/10");
+                                    controller.setMessage("Battery level: " + battery.size() + "/11");
+                                    System.out.println("Battery level: " + battery.size() + "/11");
                                     controller.sendUdpMessageToESP();
                                     batterycountdown = 50;
                                 }
@@ -72,9 +74,10 @@ public class Information implements Runnable {
                                     controller.bgc.fillRect(i + (i * 10), 0, 10, controller.batteryLevel.getHeight());
                                 }
                             }
-                            if (battery.size()==0) {
+                            if (battery.size()==0 && crashed==false) {
                                 controller.setMessage("crash");
                                 controller.sendUdpMessageToDrone();
+                                crashed=true;
                             }
                         }
                     });

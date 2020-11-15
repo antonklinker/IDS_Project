@@ -28,6 +28,7 @@ public class Controller {
     public TextField testmessagebox;
     public Canvas batteryLevel;
     public Canvas mainbackground;
+    public TableView tableViewLog;
     private GraphicsContext gc;
     private GraphicsContext mgc;
     public GraphicsContext bgc;
