@@ -119,6 +119,9 @@ public class Drone implements Runnable {
                 if (receiver.getReceived().equals("notmoving")) {
                     notMoving();
                 }
+                if (receiver.getReceived().equals("crash")) {
+                    // MAKE CRASH
+                }
                 if (takeoff) {
                     if (receiver.getReceived().equals("land")) {
                         land();

@@ -31,6 +31,8 @@ public class Controller {
     private GraphicsContext gc;
     private GraphicsContext mgc;
     public GraphicsContext bgc;
+    private String message;
+    private String ESP_IPaddress;
     double height;
     double latitude;
     boolean takeoff;
@@ -50,6 +52,8 @@ public class Controller {
         /*UdpPackage test1 = new UdpPackage("name", "data", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
         UdpPackage test2 = new UdpPackage("name", "hello world", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
         loggedPackages.addAll(test1, test2)*/;
+
+        ESP_IPaddress = "127.0.0.1";
 
 
 
@@ -92,7 +96,7 @@ public class Controller {
         takeoff=false;
     }
 
-    public void sendUdpMessage(ActionEvent actionEvent) {
+    public void sendUdpMessageToDrone(ActionEvent actionEvent) {
 
         // sends a basic test message to localhost port 6000!
 
@@ -105,6 +109,38 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendUdpMessageToDrone() {
+
+        // sends a basic test message to localhost port 6000!
+
+        DatagramPacket packet = null;
+        try {
+            packet = new DatagramPacket(message.getBytes(), message.length(), InetAddress.getByName("127.0.0.1"), 6000);
+            sender.send(packet);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendUdpMessageToESP() {
+
+        // sends a basic test message to localhost port 6000!
+
+        DatagramPacket packet = null;
+        try {
+            packet = new DatagramPacket(message.getBytes(), message.length(), InetAddress.getByName(ESP_IPaddress), 6900);
+            sender.send(packet);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setMessage(String message) {
+        this.message=message;
     }
 
 

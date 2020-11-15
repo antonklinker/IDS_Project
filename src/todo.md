@@ -3,10 +3,10 @@
 - [X] Make a matrix GUI
 - [ ] Make a list of logged messages
 - [ ] Finish the ESP32
-- [ ] Test with the ESP32
+- [X] Test with the ESP32
 - [ ] Make the drone send messages back to the controller
 - [X] Make a battery level on the emulator
-- [ ] Fix 3D movement
-- [ ] Cool stuff like flips
+- [X] Fix 3D movement
+- [ ] Cool stuff like crash
 - [ ] Fritzing
 - [ ] Write the report
