@@ -8,6 +8,7 @@ import sample.UdpPack.UdpPackageReceiver;
 
 public class Drone implements Runnable {
     private GraphicsContext gc;
+
     private Canvas canvas;
     private UdpPackageReceiver receiver;
     private double height;
@@ -19,6 +20,7 @@ public class Drone implements Runnable {
     int groundHeight;
 
 
+    // Constructer with the necessary information given from the Controller class
     public Drone(Canvas canvas, GraphicsContext gc, double latitude, double height, int sizeX, int sizeY, UdpPackageReceiver receiver) {
         this.running=true;
         this.canvas=canvas;
@@ -28,9 +30,9 @@ public class Drone implements Runnable {
         this.sizeX=sizeX;
         this.sizeY=sizeY;
         this.receiver=receiver;
-        //gc = canvas.getGraphicsContext2D();
     }
 
+    // Draws the drone on the canvas. This method is used for 2D animation
    public void drawDrone(double latitude, double height) {
        this.latitude=latitude;
        this.height=height;
@@ -42,16 +44,32 @@ public class Drone implements Runnable {
            gc.fillRect(0, i+(i*10), canvas.getWidth(), 1);
            gc.fillRect(i+(i*10), 0, 1, canvas.getHeight());
        }
-       gc.setFill(Color.BLACK);
-       gc.fillOval(latitude-1, height-1, sizeX+2, sizeY+2);
+
+       //left wing
        gc.setFill(Color.GREEN);
-       gc.fillOval(latitude, height, sizeX, sizeY);
-       gc.setFill(Color.BLACK);
-       gc.fillOval(latitude+1, height+1, sizeX-2, sizeY-2);
+       gc.fillRect(latitude+4, height-10, sizeX-37, sizeY-10);
+       gc.fillRect(latitude-3, height-10, sizeX-24, sizeY-18);
+
+       //right wing
        gc.setFill(Color.GREEN);
-       gc.fillOval(latitude+2, height+2, sizeX-4, sizeY-4);
+       gc.fillRect(latitude+31, height-10, sizeX-37, sizeY-10);
+       gc.fillRect(latitude+24, height-10, sizeX-24, sizeY-18);
+
+       //body
+       gc.setFill(Color.BLACK);
+       gc.fillRect(latitude-1, height-1, sizeX+2, sizeY+2);
+       gc.setFill(Color.GREEN);
+       gc.fillRect(latitude, height, sizeX, sizeY);
+       gc.setFill(Color.BLACK);
+       gc.fillRect(latitude+1, height+1, sizeX-2, sizeY-2);
+       gc.setFill(Color.GREEN);
+       gc.fillRect(latitude+2, height+2, sizeX-4, sizeY-4);
+
+
     }
 
+    // Draws the drone on the canvas with 3D information. Used to move forward and backward
+    // (the string is used to distinguish this method from the other drawDrone method)
     public void drawDrone(int sizeX, int sizeY, String distinguish) {
         this.sizeX=sizeX;
         this.sizeY=sizeY;
@@ -107,6 +125,7 @@ public class Drone implements Runnable {
         }
     }
 
+    // Animation for when the drone is stalling
     public void notMoving() {
         try {
                 for (int i = 0; i <= 6; i++) {
@@ -125,6 +144,7 @@ public class Drone implements Runnable {
         }
     }
 
+    // Animating the takeoff from the ground
     public void takeOff() {
         try {
             moving=true;
@@ -142,10 +162,11 @@ public class Drone implements Runnable {
     }
 
 
+    // The next couple of methods animates 2D movement
     public void moveLeft() {
         try {
             moving=true;
-            for (int i=10; i>0; i--) {
+            for (int i=15; i>0; i--) {
                 latitude=latitude-(i*0.1);
                 drawDrone(latitude, height);
                 Thread.sleep(20);
@@ -160,7 +181,7 @@ public class Drone implements Runnable {
     public void moveRight() {
         try {
             moving=true;
-            for (int i=0; i<10; i++) {
+            for (int i=0; i<15; i++) {
                 latitude=latitude+(i*0.1);
                 drawDrone(latitude, height);
                 Thread.sleep(20);
@@ -175,7 +196,7 @@ public class Drone implements Runnable {
     public void moveDown() {
         try {
             moving=true;
-            for (int i=0; i<10; i++) {
+            for (int i=0; i<15; i++) {
                 height=height +(i*0.1);
                 drawDrone(latitude, height);
                 Thread.sleep(20);
@@ -190,7 +211,7 @@ public class Drone implements Runnable {
     public void moveUp() {
         try {
             moving=true;
-            for (int i=10; i>0; i--) {
+            for (int i=15; i>0; i--) {
                 height=height-(i*0.1);
                 drawDrone(latitude, height);
                 Thread.sleep(5);
@@ -202,6 +223,7 @@ public class Drone implements Runnable {
         moving=false;
     }
 
+    // Animates the landing sequence
     public void land() {
         try {
             moving=true;
@@ -227,6 +249,7 @@ public class Drone implements Runnable {
         }
     }
 
+    // Forward and back increases the size of the drone, making it appear close or further away
     public void forward() {
         try {
             moving=true;

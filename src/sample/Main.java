@@ -15,6 +15,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("emulator.fxml"));
         primaryStage.setTitle("Drone emulator hosted on: " + InetAddress.getLocalHost());
         primaryStage.setScene(new Scene(root, 1200 , 800));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

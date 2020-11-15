@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.*;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.*;
 import javafx.scene.canvas.*;
 import sample.Figure.Drone;
@@ -25,7 +26,11 @@ public class Controller {
     public Label flying;
     public Button udpbutton;
     public TextField testmessagebox;
+    public Canvas batteryLevel;
+    public Canvas mainbackground;
     private GraphicsContext gc;
+    private GraphicsContext mgc;
+    public GraphicsContext bgc;
     double height;
     double latitude;
     boolean takeoff;
@@ -49,6 +54,7 @@ public class Controller {
 
 
 
+
         receiver = new UdpPackageReceiver(loggedPackages, 6000);
         new Thread(receiver).start();
 
@@ -62,20 +68,26 @@ public class Controller {
 
 
         gc = canvas.getGraphicsContext2D();
+        bgc = batteryLevel.getGraphicsContext2D();
+        mgc = mainbackground.getGraphicsContext2D();
+        mgc.setFill(Color.DARKBLUE);
+        mgc.setGlobalAlpha(0.5);
+        for (int i=0; i<mainbackground.getWidth()/15; i++) {
+            mgc.fillRect(i+(i*15), 0, 1, mainbackground.getHeight());
+        }
+        for (int i=0; i<mainbackground.getHeight()/15; i++) {
+            mgc.fillRect(0, i+(i*15), mainbackground.getWidth(), 1);
+        }
 
-        gc.setFill(Color.GREEN);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         height=canvas.getHeight()-30;
         latitude=canvas.getWidth()/2-25;
 
-        //gc.setFill(Color.DARKRED);
 
-        drone = new Drone(canvas, gc, latitude, height, 50, 20, receiver);
+        drone = new Drone(canvas, gc, latitude, height, 40, 20, receiver);
         new Thread(drone).start();
         information = new Information(this, drone);
         new Thread(information).start();
-        //drone.drawDrone(latitude, height);
-        //gc.fillOval(latitude, height, 50, 20);
 
         takeoff=false;
     }
