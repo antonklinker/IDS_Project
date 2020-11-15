@@ -12,16 +12,24 @@
       <RowConstraints />
    </rowConstraints>
    <children>
-      <AnchorPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: BLACK;">
+      <AnchorPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: BLACK; -fx-border-color: GREEN;">
          <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Canvas fx:id="mainbackground" height="800.0" width="1200.0" />
+                  <Canvas fx:id="batteryLevel" height="19.0" layoutX="998.0" layoutY="160.0" width="133.0" />
+                  <Label layoutX="998.0" layoutY="133.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="Battery level" />
+               </children>
+            </AnchorPane>
             <Canvas fx:id="canvas" height="595.0" layoutX="380.0" layoutY="187.0" width="804.0" />
-            <Label layoutX="907.0" layoutY="68.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN;" text="Speed:" />
-            <Label layoutX="907.0" layoutY="41.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN;" text="Altitude:" />
-            <Label fx:id="speed" layoutX="985.0" layoutY="68.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN;" text="INFO" />
-            <Label fx:id="altitude" layoutX="985.0" layoutY="41.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN;" text="INFO" />
-            <Label fx:id="flying" layoutX="547.0" layoutY="68.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN;" text="INFO" />
-            <Button fx:id="udpbutton" layoutX="69.0" layoutY="75.0" mnemonicParsing="false" onAction="#sendUdpMessage" style="-fx-background-color: BLACK; -fx-border-color: GREEN;" text="Send message" textFill="#029a14" />
-            <TextField fx:id="testmessagebox" layoutX="40.0" layoutY="38.0" style="-fx-background-color: BLACK; -fx-border-color: GREEN; -fx-text-inner-color: GREEN" />
+            <Label layoutX="907.0" layoutY="68.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="Speed:" />
+            <Label layoutX="907.0" layoutY="41.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="Altitude:" />
+            <Label fx:id="speed" layoutX="985.0" layoutY="68.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="INFO" />
+            <Label fx:id="altitude" layoutX="985.0" layoutY="41.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="INFO" />
+            <Label fx:id="flying" layoutX="736.0" layoutY="161.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="INFO" />
+            <Button fx:id="udpbutton" layoutX="68.0" layoutY="115.0" mnemonicParsing="false" onAction="#sendUdpMessage" style="-fx-background-color: BLACK; -fx-border-color: GREEN;" text="Send message" textFill="#029a14" />
+            <TextField fx:id="testmessagebox" layoutX="39.0" layoutY="78.0" style="-fx-background-color: BLACK; -fx-border-color: GREEN; -fx-text-inner-color: GREEN" />
+            <Label layoutX="15.0" layoutY="52.0" style="-fx-text-fill: GREEN; -fx-border-color: GREEN; -fx-background-color: BLACK;" text="Manually send UDP message to drone" />
          </children>
       </AnchorPane>
    </children>

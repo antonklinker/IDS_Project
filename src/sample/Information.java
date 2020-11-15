@@ -33,11 +33,17 @@ public class Information implements Runnable {
                         public void run() {
                             int realHeight = (int)(-drone.getHeight()+565);
                             controller.altitude.setText(String.valueOf(realHeight));
+                            batterycountdown--;
                             if (realHeight>0) {
                                 controller.flying.setText("Drone is airborne");
-                                batterycountdown--;
                             } else {
                                 controller.flying.setText("Drone is on the ground");
+                                if (batterycountdown==0) {
+                                    if (battery.size()<=10) {
+                                        battery.add(1);
+                                    }
+                                    batterycountdown=50;
+                                }
                             }
 
                             if (battery.size()>0) {
@@ -47,6 +53,8 @@ public class Information implements Runnable {
                                 }
 
                                 controller.bgc.clearRect(0, 0, controller.batteryLevel.getWidth(), controller.batteryLevel.getHeight());
+                                controller.bgc.setFill(Color.BLACK);
+                                controller.bgc.fillRect(0, 0, controller.batteryLevel.getWidth()-11, controller.batteryLevel.getHeight());
                                 for (int i = 0; i < battery.size(); i++) {
                                     if (battery.size() > 5) {
                                         controller.bgc.setFill(Color.GREEN);

@@ -3,8 +3,11 @@ package sample.Figure;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import sample.Controller;
 import sample.Information;
 import sample.UdpPack.UdpPackageReceiver;
+
+import java.net.UnknownHostException;
 
 public class Drone implements Runnable {
     private GraphicsContext gc;
@@ -44,6 +47,8 @@ public class Drone implements Runnable {
            gc.fillRect(0, i+(i*10), canvas.getWidth(), 1);
            gc.fillRect(i+(i*10), 0, 1, canvas.getHeight());
        }
+       gc.setFill(Color.DARKGREEN);
+       gc.fillRect(0, canvas.getHeight()-11, canvas.getWidth(), 11);
 
        //left wing
        gc.setFill(Color.GREEN);
@@ -111,14 +116,17 @@ public class Drone implements Runnable {
                 if (receiver.getReceived().equals("back")) {
                     back();
                 }
+                if (receiver.getReceived().equals("notmoving")) {
+                    notMoving();
+                }
                 if (takeoff) {
                     if (receiver.getReceived().equals("land")) {
                         land();
                     }
                 }
-                notMoving();
+                //notMoving();
             }
-                Thread.sleep(50);
+                Thread.sleep(100);
                 } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -163,7 +171,7 @@ public class Drone implements Runnable {
 
 
     // The next couple of methods animates 2D movement
-    public void moveLeft() {
+    /*public void moveLeft() {
         try {
             moving=true;
             for (int i=15; i>0; i--) {
@@ -176,9 +184,17 @@ public class Drone implements Runnable {
         }
         receiver.setReceived("not moving");
         moving=false;
+    }*/
+
+    public void moveLeft() {
+            moving=true;
+        latitude--;
+        drawDrone(latitude, height);
+        receiver.setReceived("not moving");
+        moving=false;
     }
 
-    public void moveRight() {
+    /*public void moveRight() {
         try {
             moving=true;
             for (int i=0; i<15; i++) {
@@ -191,9 +207,18 @@ public class Drone implements Runnable {
         }
         receiver.setReceived("not moving");
         moving=false;
+    }*/
+
+    public void moveRight() {
+
+        moving=true;
+        latitude++;
+        drawDrone(latitude, height);
+        receiver.setReceived("not moving");
+        moving=false;
     }
 
-    public void moveDown() {
+    /*public void moveDown() {
         try {
             moving=true;
             for (int i=0; i<15; i++) {
@@ -206,9 +231,19 @@ public class Drone implements Runnable {
         }
         receiver.setReceived("not moving");
         moving=false;
+    }*/
+
+    public void moveDown() {
+
+            moving=true;
+        height++;
+        drawDrone(latitude, height);
+
+        receiver.setReceived("not moving");
+        moving=false;
     }
 
-    public void moveUp() {
+    /*public void moveUp() {
         try {
             moving=true;
             for (int i=15; i>0; i--) {
@@ -219,6 +254,13 @@ public class Drone implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        receiver.setReceived("not moving");
+        moving=false;
+    }*/
+    public void moveUp() {
+            moving=true;
+        height--;
+        drawDrone(latitude, height);
         receiver.setReceived("not moving");
         moving=false;
     }
