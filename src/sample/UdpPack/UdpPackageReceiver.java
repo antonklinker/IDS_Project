@@ -38,6 +38,10 @@ public class UdpPackageReceiver implements Runnable{
         return received;
     }
 
+    public void setReceived(String received) {
+        this.received=received;
+    }
+
     @Override
     public void run() {
         received = "WELCOME";

@@ -21,7 +21,6 @@ import java.net.*;
 public class Controller {
     public Label speed;
     public Label altitude;
-    public Button beginButton;
     public Canvas canvas;
     public Label flying;
     public Button udpbutton;
@@ -31,6 +30,7 @@ public class Controller {
     double latitude;
     boolean takeoff;
 
+
     private ObservableList<UdpPackage> savedPackages = FXCollections.observableArrayList();
     private ObservableList<UdpPackage> loggedPackages = FXCollections.observableArrayList();
 
@@ -38,12 +38,15 @@ public class Controller {
     private DatagramSocket sender;
     private Drone drone;
     private Thread listenTimer;
+    private Information information;
 
 
     public void initialize() throws UnknownHostException {
         /*UdpPackage test1 = new UdpPackage("name", "data", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
         UdpPackage test2 = new UdpPackage("name", "hello world", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
         loggedPackages.addAll(test1, test2)*/;
+
+
 
 
         receiver = new UdpPackageReceiver(loggedPackages, 6000);
@@ -60,7 +63,7 @@ public class Controller {
 
         gc = canvas.getGraphicsContext2D();
 
-        gc.setFill(Color.GRAY);
+        gc.setFill(Color.GREEN);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         height=canvas.getHeight()-30;
         latitude=canvas.getWidth()/2-25;
@@ -69,11 +72,12 @@ public class Controller {
 
         drone = new Drone(canvas, gc, latitude, height, 50, 20, receiver);
         new Thread(drone).start();
+        information = new Information(this, drone);
+        new Thread(information).start();
         //drone.drawDrone(latitude, height);
         //gc.fillOval(latitude, height, 50, 20);
 
         takeoff=false;
-        setInformation();
     }
 
     public void sendUdpMessage(ActionEvent actionEvent) {
@@ -92,49 +96,7 @@ public class Controller {
     }
 
 
-
-    public void begin(ActionEvent actionEvent) {
-       // gc = canvas.getGraphicsContext2D();
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        gc.setFill(Color.GRAY);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-
-        if (!takeoff) {
-            takeOff();
-            takeoff=true;
-        }
-        setInformation();
-
-
-        //gc.setFill(Color.DARKRED);
-        //gc.fillOval(latitude, height, 50, 20);
-        drone.drawDrone(latitude, height);
-
-        height--;
-
-
-    }
-
-    public void takeOff() {
-
-
-
-    }
-
-    public void setInformation() {
-        boolean inAir;
-        //double realHeight = ((-height)+(canvas.getHeight())-30);
-        if (getHeight()>0) {
-            inAir=true;
-        } else {
-            inAir=false;
-        }
-        altitude.setText("" + getHeight());
-        flying.setText("" + inAir);
-    }
-
-    public double getHeight() {
+    /*public double getHeight() {
         return ((-height)+(canvas.getHeight())-30);
     }
 
@@ -144,6 +106,6 @@ public class Controller {
 
     public void listen() {
 
-    }
+    }*/
 
 }
