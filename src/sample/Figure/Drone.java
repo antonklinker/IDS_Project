@@ -42,23 +42,20 @@ public class Drone implements Runnable {
            gc.fillRect(0, i+(i*10), canvas.getWidth(), 1);
            gc.fillRect(i+(i*10), 0, 1, canvas.getHeight());
        }
-       gc.setFill(Color.DARKGREEN);
+       gc.setFill(Color.BLACK);
+       gc.fillOval(latitude-1, height-1, sizeX+2, sizeY+2);
+       gc.setFill(Color.GREEN);
        gc.fillOval(latitude, height, sizeX, sizeY);
+       gc.setFill(Color.BLACK);
+       gc.fillOval(latitude+1, height+1, sizeX-2, sizeY-2);
+       gc.setFill(Color.GREEN);
+       gc.fillOval(latitude+2, height+2, sizeX-4, sizeY-4);
     }
 
     public void drawDrone(int sizeX, int sizeY, String distinguish) {
         this.sizeX=sizeX;
         this.sizeY=sizeY;
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int i=0; i<100; i++) {
-            gc.setFill(Color.GREEN);
-            gc.fillRect(0, i+(i*10), canvas.getWidth(), 1);
-            gc.fillRect(i+(i*10), 0, 1, canvas.getHeight());
-        }
-        gc.setFill(Color.DARKGREEN);
-        gc.fillOval(latitude, height, sizeX, sizeY);
+        drawDrone(latitude, height);
     }
 
     public double getHeight() {

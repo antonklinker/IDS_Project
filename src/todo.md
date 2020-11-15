@@ -1,0 +1,12 @@
+- [X] Setup communication
+- [X] Make functional movement
+- [X] Make a matrix GUI
+- [ ] Make a list of logged messages
+- [ ] Finish the ESP32
+- [ ] Test with the ESP32
+- [ ] Make the drone send messages back to the controller
+- [ ] Make a battery level on the emulator
+- [ ] Fix 3D movement
+- [ ] Cool stuff like flips
+- [ ] Fritzing
+- [ ] Write the report
