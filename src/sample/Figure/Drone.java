@@ -22,6 +22,8 @@ public class Drone implements Runnable {
     boolean takeoff = false;
     int groundHeight;
 
+    // IMPORTANT: 3D movement was never finished and should not be used
+
 
     // Constructer with the necessary information given from the Controller class
     public Drone(Canvas canvas, GraphicsContext gc, double latitude, double height, int sizeX, int sizeY, UdpPackageReceiver receiver) {
@@ -93,13 +95,14 @@ public class Drone implements Runnable {
         groundHeight=(int)height;
         drawDrone(latitude, height);
         while (running) {
+            // this section run's once every 20 milliseconds until the end of time (or the program is shut down)
+            // it checks if the received UDP messages is equal to any know commands and will act accordingly
             try {
             if (!takeoff) {
                 if (receiver.getReceived().equals("takeoff")) {
                     takeOff();
                 }
             }
-
             while (!moving) {
                 if (receiver.getReceived().equals("left")) {
                     moveLeft();
@@ -130,7 +133,6 @@ public class Drone implements Runnable {
                         land();
                     }
                 }
-                //notMoving();
             }
                 Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -140,6 +142,9 @@ public class Drone implements Runnable {
     }
 
     // Animation for when the drone is stalling
+    // this looks pretty cool, but it does come with a problem:
+    // this thread sleeps for 50*7*2 milliseconds and there can be some delay when receiving a new message
+    // but the again, it does look pretty cool
     public void notMoving() {
         try {
                 for (int i = 0; i <= 6; i++) {
@@ -177,20 +182,6 @@ public class Drone implements Runnable {
 
 
     // The next couple of methods animates 2D movement
-    /*public void moveLeft() {
-        try {
-            moving=true;
-            for (int i=15; i>0; i--) {
-                latitude=latitude-(i*0.1);
-                drawDrone(latitude, height);
-                Thread.sleep(20);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        receiver.setReceived("not moving");
-        moving=false;
-    }*/
 
     public void moveLeft() {
             moving=true;
@@ -200,21 +191,6 @@ public class Drone implements Runnable {
         moving=false;
     }
 
-    /*public void moveRight() {
-        try {
-            moving=true;
-            for (int i=0; i<15; i++) {
-                latitude=latitude+(i*0.1);
-                drawDrone(latitude, height);
-                Thread.sleep(20);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        receiver.setReceived("not moving");
-        moving=false;
-    }*/
-
     public void moveRight() {
 
         moving=true;
@@ -223,21 +199,6 @@ public class Drone implements Runnable {
         receiver.setReceived("not moving");
         moving=false;
     }
-
-    /*public void moveDown() {
-        try {
-            moving=true;
-            for (int i=0; i<15; i++) {
-                height=height +(i*0.1);
-                drawDrone(latitude, height);
-                Thread.sleep(20);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        receiver.setReceived("not moving");
-        moving=false;
-    }*/
 
     public void moveDown() {
 
@@ -249,20 +210,6 @@ public class Drone implements Runnable {
         moving=false;
     }
 
-    /*public void moveUp() {
-        try {
-            moving=true;
-            for (int i=15; i>0; i--) {
-                height=height-(i*0.1);
-                drawDrone(latitude, height);
-                Thread.sleep(5);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        receiver.setReceived("not moving");
-        moving=false;
-    }*/
     public void moveUp() {
             moving=true;
         height--;
@@ -331,6 +278,7 @@ public class Drone implements Runnable {
         moving=false;
     }
 
+    // Animates a cool crash
     public void crash() {
         try {
             moving=true;

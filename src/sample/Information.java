@@ -33,8 +33,12 @@ public class Information implements Runnable {
                     new Runnable() {
                         @Override
                         public void run() {
-
+                            // creating an integer to store the "real" height of the drone since
+                            // the drone.getHeight() returns a wrong number
                             int realHeight = (int)(-drone.getHeight()+565);
+
+                            // don't mind the wrongly named labels. they should be
+                            // latitude and longitude instead of height and speed
                             controller.altitude.setText(String.valueOf(realHeight));
                             controller.speed.setText(String.valueOf((int)drone.getLatitude()));
                             batterycountdown--;
@@ -44,17 +48,23 @@ public class Information implements Runnable {
                                 controller.flying.setText("Drone is on the ground");
                                 if (batterycountdown==0) {
                                     if (battery.size()<=10) {
+                                        // recharges the battery while the drone is at ground-level every 50*100 milliseconds
+                                        // and sends information about the battery back to the ESP32
                                         battery.add(1);
                                         controller.setMessage("Battery level: " + battery.size() + "/11");
                                         System.out.println("Battery level: " + battery.size() + "/11");
                                         controller.sendUdpMessageToESP();
                                     }
+                                    // resets the countdown so it can hit 0 once more
                                     batterycountdown=50;
                                 }
                             }
 
                             if (battery.size()>0) {
                                 if (batterycountdown == 0) {
+                                    // removes a battery charge every 50*100 milliseconds
+                                    // and sends battery information back to the ESP32.
+                                    // could maybe be done using battery.remove(0) instead, but this works
                                     battery.remove(battery.size() - 1);
                                     controller.setMessage("Battery level: " + battery.size() + "/11");
                                     System.out.println("Battery level: " + battery.size() + "/11");
@@ -62,6 +72,7 @@ public class Information implements Runnable {
                                     batterycountdown = 50;
                                 }
 
+                                // animates a cool battery and changes the color if the battery is low
                                 controller.bgc.clearRect(0, 0, controller.batteryLevel.getWidth(), controller.batteryLevel.getHeight());
                                 controller.bgc.setFill(Color.BLACK);
                                 controller.bgc.fillRect(0, 0, controller.batteryLevel.getWidth()-11, controller.batteryLevel.getHeight());
@@ -76,9 +87,12 @@ public class Information implements Runnable {
                                     controller.bgc.fillRect(i + (i * 10), 0, 10, controller.batteryLevel.getHeight());
                                 }
                             }
+                            // sends the crash command to the drone. can only be done once per run
                             if (battery.size()==0 && crashed==false) {
                                 controller.setMessage("crash");
                                 controller.sendUdpMessageToDrone();
+                                controller.setMessage("crashing");
+                                controller.sendUdpMessageToESP();
                                 crashed=true;
                             }
                         }

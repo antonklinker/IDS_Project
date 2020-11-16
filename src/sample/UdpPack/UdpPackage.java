@@ -6,6 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class UdpPackage {
+    // IMPORTANT:
+    // This entire class is actually never used.
+    // It's only relevant to log and save packages which the program does very poorly at the moment
     private Date date;
     private String name;
     private byte[] data;

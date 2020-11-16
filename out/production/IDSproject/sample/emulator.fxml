@@ -30,8 +30,8 @@
                </children>
             </AnchorPane>
             <Canvas fx:id="canvas" height="595.0" layoutX="380.0" layoutY="187.0" width="804.0" />
-            <Label layoutX="907.0" layoutY="68.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="Speed:" />
-            <Label layoutX="907.0" layoutY="41.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="Altitude:" />
+            <Label layoutX="907.0" layoutY="68.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="Longitude:" />
+            <Label layoutX="907.0" layoutY="41.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="Latitude:   " />
             <Label fx:id="speed" layoutX="985.0" layoutY="68.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="INFO" />
             <Label fx:id="altitude" layoutX="985.0" layoutY="41.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="INFO" />
             <Label fx:id="flying" layoutX="736.0" layoutY="161.0" style="-fx-border-color: GREEN; -fx-text-fill: GREEN; -fx-background-color: BLACK;" text="INFO" />

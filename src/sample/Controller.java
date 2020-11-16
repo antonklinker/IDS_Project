@@ -42,7 +42,7 @@ public class Controller {
 
 
     //private ObservableList<UdpPackage> savedPackages = FXCollections.observableArrayList();
-    private ObservableList<UdpPackage> loggedPackages = FXCollections.observableArrayList();
+    //private ObservableList<UdpPackage> loggedPackages = FXCollections.observableArrayList();
 
     private UdpPackageReceiver receiver;
     private DatagramSocket sender;
@@ -56,6 +56,7 @@ public class Controller {
         UdpPackage test2 = new UdpPackage("name", "hello world", InetAddress.getByName("127.0.0.1"), InetAddress.getByName("127.0.0.1"), 4000,4000);
         loggedPackages.addAll(test1, test2);*/
 
+        // not the correct address of the ESP of course, but this is where we'll store it
         ESP_IPaddress = "127.0.0.1";
 
         /*tableViewLog.setItems(loggedPackages);
@@ -73,12 +74,14 @@ public class Controller {
         logToIP.setCellValueFactory(
                 new PropertyValueFactory<UdpPackage, String>("toIp")
         );
-         */
-
-
 
 
         receiver = new UdpPackageReceiver(loggedPackages, 6000);
+
+         */
+
+        // initializes a new thread with the sole purpose of handling UDP messages on port 6000.
+        receiver = new UdpPackageReceiver(6000);
         new Thread(receiver).start();
 
 
@@ -87,7 +90,6 @@ public class Controller {
         } catch (SocketException e) {
             e.printStackTrace();
         }
-
 
 
         gc = canvas.getGraphicsContext2D();
@@ -115,9 +117,9 @@ public class Controller {
         takeoff=false;
     }
 
+    // this method is called when you press the button in the top right
+    // will send a USP message from the emulator to the drone (from itself to itself)
     public void sendUdpMessageToDrone(ActionEvent actionEvent) {
-
-        // sends a basic test message to localhost port 6000!
 
         String message = testmessagebox.getText();
         DatagramPacket packet = null;
@@ -130,9 +132,8 @@ public class Controller {
         }
     }
 
+    // essentially the same method as the one above, but this can be called without pushing a button
     public void sendUdpMessageToDrone() {
-
-        // sends a basic test message to localhost port 6000!
 
         DatagramPacket packet = null;
         try {
@@ -144,9 +145,8 @@ public class Controller {
         }
     }
 
+    // sends a UDP message to the controller
     public void sendUdpMessageToESP() {
-
-        // sends a basic test message to localhost port 6000!
 
         DatagramPacket packet = null;
         try {
@@ -170,17 +170,5 @@ public class Controller {
         this.message=message;
     }
 
-
-    /*public double getHeight() {
-        return ((-height)+(canvas.getHeight())-30);
-    }
-
-    public void moveUp() {
-        height=height-5;
-    }
-
-    public void listen() {
-
-    }*/
 
 }
