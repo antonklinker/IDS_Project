@@ -86,6 +86,7 @@ public class Drone implements Runnable {
     public double getHeight() {
         return height;
     }
+    public double getLatitude() { return latitude; }
 
     @Override
     public void run() {

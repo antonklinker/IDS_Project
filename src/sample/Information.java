@@ -25,7 +25,7 @@ public class Information implements Runnable {
     public void run() {
         crashed=false;
         running=true;
-        for (int i=0; i<=1; i++) {
+        for (int i=0; i<=10; i++) {
             battery.add(i);
         }
         while (running) {
@@ -33,8 +33,10 @@ public class Information implements Runnable {
                     new Runnable() {
                         @Override
                         public void run() {
+
                             int realHeight = (int)(-drone.getHeight()+565);
                             controller.altitude.setText(String.valueOf(realHeight));
+                            controller.speed.setText(String.valueOf((int)drone.getLatitude()));
                             batterycountdown--;
                             if (realHeight>0) {
                                 controller.flying.setText("Drone is airborne");
